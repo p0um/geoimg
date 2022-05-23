@@ -4,5 +4,5 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenCV REQUIRED)
 
-add_executable(geoimg main.cpp)
+add_executable(geoimg main.cpp src/Utilities.h)
 target_link_libraries(geoimg ${OpenCV_LIBS})
