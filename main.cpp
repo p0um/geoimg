@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "src/Utilities.h"
+#include "src/Shapes/Circle.h"
 
 const char* IMG_PATH = "./images/apples.jpg";
 
@@ -29,6 +30,10 @@ int main() {
             writeColor(canvas, row, col, meanColor);
         }
     }
+
+    // Test writing circle
+    Circle circle(128, 128, 50, (const uint8_t []){128, 255, 255});
+    circle.draw(canvas, sourceImg);
 
     cv::imshow("Canvas", canvas);
     cv::waitKey();
