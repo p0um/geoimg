@@ -7,6 +7,8 @@
 
 const char* IMG_PATH = "./images/apples.jpg";
 
+void getMeanColor(const cv::Mat &img, uint8_t *color);
+
 int main() {
     auto sourceImg = cv::imread(IMG_PATH, cv::IMREAD_COLOR);
 
@@ -14,21 +16,32 @@ int main() {
         std::cerr << "Error trying to open the specified image in color.";
         return 1;
     }
-
     cv::imshow("Original", sourceImg);
+
+    uint8_t meanColor[3];
+    getMeanColor(sourceImg, meanColor);
+
 
     auto canvas = cv::Mat(sourceImg.rows, sourceImg.cols, CV_8UC3);
 
     for (int row = 0; row < canvas.rows; row++) {
         for (int col = 0; col < canvas.cols; col++) {
-            uint8_t color[3];
-            getColorAt(sourceImg, row, col, color);
-            canvas.data[row*canvas.cols*3 + col*3] = color[2];
-            canvas.data[row*canvas.cols*3 + col*3 + 1] = color[1];
-            canvas.data[row*canvas.cols*3 + col*3 + 2] = color[0];
+            writeColor(canvas, row, col, meanColor);
         }
     }
 
     cv::imshow("Canvas", canvas);
     cv::waitKey();
+}
+
+void getMeanColor(const cv::Mat &img, uint8_t *color) {
+    for (int c = 0; c < 3; c++) {
+        unsigned long sum = 0;
+        for (int row = 0; row < img.rows; row++) {
+            for (int col = 0; col < img.cols; col++) {
+                sum += img.data[row*img.cols*3 + col*3 + c];
+            }
+        }
+        color[2-c] = sum / (img.rows*img.cols);  // Store in reverse (BGR->RGB conversion)
+    }
 }
