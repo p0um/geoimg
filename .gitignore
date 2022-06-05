@@ -2,4 +2,4 @@
 
 cmake-build*/
 images/
-conan/
+build*/
